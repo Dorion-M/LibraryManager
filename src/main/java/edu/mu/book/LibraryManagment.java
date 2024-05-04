@@ -141,7 +141,37 @@ public class LibraryManagment {
         });
         return sortedBooks; 
     }
+   
+    public List<Book> sortByGenre(){
+    	List<Book> sortedGenre = new ArrayList<>();
+    	sortedGenre = personalLibrary;
     	
+    	Collections.sort(sortedGenre, new Comparator<Book>() {
+    		public int compare(Book b1, Book b2) {
+    			return b1.getGenre().name().compareTo(b2.getGenre().name());
+            }
+    	});
+    	return sortedGenre;
+    		
+    }
+    
+    public List<Book> sortBooksByYear() {
+    	
+   	 List<Book> sortedByYear = new ArrayList<>(); 
+   	 sortedByYear = personalLibrary;
+   	
+       Collections.sort(sortedByYear, new Comparator<Book>() {
+          
+           public int compare(Book b1, Book b2) {
+        	   return Integer.compare(b1.getPublicationYear(), b2.getPublicationYear());
+        	   
+           }
+       });
+       	return sortedByYear;
+       
+    }
+    
+    
     
     
     
