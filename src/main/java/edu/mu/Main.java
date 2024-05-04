@@ -117,8 +117,11 @@ public class Main {
                 System.out.println("Error: Invalid input. Please enter a valid reading status.");
             }
         }
+        
+        System.out.print("Enter favroited status ('Y' or 'N'): ");
+        char favoritedStatus = scanner.next().charAt(0);
 
-        Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus);
+        Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus, favoritedStatus);
         myLibrary.addBookToLibrary(book);
         System.out.println("Book added successfully.");
     }

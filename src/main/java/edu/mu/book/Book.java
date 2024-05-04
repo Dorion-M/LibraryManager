@@ -10,9 +10,10 @@ public class Book {
 	protected Genre genre;
 	protected int pageCount;
 	protected ReadingStatus ReadingStatus;
+	protected char favoritedStatus;
 	
 	
-	public Book(String title, String author, int publicationYear, Genre genre, int pageCount, ReadingStatus ReadingStatus) {
+	public Book(String title, String author, int publicationYear, Genre genre, int pageCount, ReadingStatus ReadingStatus, char favoritedStatus) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -20,6 +21,7 @@ public class Book {
 		this.genre = genre;
 		this.pageCount = pageCount;
 		this.ReadingStatus = ReadingStatus;
+		this.favoritedStatus = favoritedStatus;
 	}
 	
 	public Book(Book copy) {
@@ -30,6 +32,7 @@ public class Book {
 		this.genre = copy.genre;
 		this.pageCount = copy.pageCount;
 		this.ReadingStatus = copy.ReadingStatus;
+		this.favoritedStatus = copy.favoritedStatus;
 	}
 
 
@@ -81,11 +84,20 @@ public class Book {
 	public void setReadingStatus(ReadingStatus readingStatus) {
 		ReadingStatus = readingStatus;
 	}
+	
+	public char getFavoritedStatus(){
+		return favoritedStatus;
+	}
+	
+	public void setfavoritedStatus(char favoritedStatus) {
+		this.favoritedStatus = favoritedStatus;
+	}
+	
 
 	@Override
 	public String toString() {
-	    return String.format("Title: %-20s Author: %-20s Publication Year: %-6d Genre: %-10s Page Count: %-4d Reading Status: %s", 
-	                         title, author, publicationYear, genre, pageCount, ReadingStatus);
+	    return String.format("Title: %-20s Author: %-20s Publication Year: %-6d Genre: %-10s Page Count: %-4d Reading Status: %s Favorite: %c", 
+	                         title, author, publicationYear, genre, pageCount, ReadingStatus, favoritedStatus);
 	}
 	
 	
@@ -96,7 +108,9 @@ public class Book {
 	            Integer.toString(publicationYear),
 	            genre.toString(), 
 	            Integer.toString(pageCount),
-	            ReadingStatus.toString()  
+	            ReadingStatus.toString(),
+	            Character.toString(favoritedStatus)
+	            
 	    );
 	}
 	

@@ -76,14 +76,15 @@ public class LibraryManagment {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 6) {
+                if (parts.length == 7) {
                     String title = parts[0].trim();
                     String author = parts[1].trim();
                     int publicationYear = Integer.parseInt(parts[2].trim());
                     Genre genre = Genre.valueOf(parts[3].trim());
                     int pageCount = Integer.parseInt(parts[4].trim());
                     ReadingStatus readingStatus = ReadingStatus.valueOf(parts[5].trim());
-                    Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus);
+                    char favoritedStatus = parts[6].trim().charAt(0);
+                    Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus, favoritedStatus);
                     library.add(book);
                 }
             }
@@ -92,6 +93,26 @@ public class LibraryManagment {
         }
         return library;
     }
+    
+    public List<Book> showFavoritedBooks()
+    {
+    	List<Book> favorites = new ArrayList<>();
+    	char test;
+    	for (Book book : personalLibrary) 
+    	{
+            test = book.getFavoritedStatus();
+    		if (test == 'y' || test == 'Y') {
+                favorites.add(book);
+            }
+        }
+        return favorites;
+    }
+    
+    
+    
+    
+    
+    
     
     
 }
