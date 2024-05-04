@@ -76,15 +76,14 @@ public class LibraryManagment {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 7) {
-                    String ISBN = parts[0].trim();
-                    String title = parts[1].trim();
-                    String author = parts[2].trim();
-                    int publicationYear = Integer.parseInt(parts[3].trim());
-                    Genre genre = Genre.valueOf(parts[4].trim());
-                    int pageCount = Integer.parseInt(parts[5].trim());
-                    ReadingStatus readingStatus = ReadingStatus.valueOf(parts[6].trim());
-                    Book book = new Book(ISBN, title, author, publicationYear, genre, pageCount, readingStatus);
+                if (parts.length == 6) {
+                    String title = parts[0].trim();
+                    String author = parts[1].trim();
+                    int publicationYear = Integer.parseInt(parts[2].trim());
+                    Genre genre = Genre.valueOf(parts[3].trim());
+                    int pageCount = Integer.parseInt(parts[4].trim());
+                    ReadingStatus readingStatus = ReadingStatus.valueOf(parts[5].trim());
+                    Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus);
                     library.add(book);
                 }
             }

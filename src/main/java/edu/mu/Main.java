@@ -1,12 +1,11 @@
 package edu.mu;
 
+import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.List;
 
-import edu.mu.book.LibraryManagment;
-import edu.mu.book.Book;
-import edu.mu.book.Genre;
-import edu.mu.book.ReadingStatus;
+import edu.mu.book.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -14,58 +13,112 @@ public class Main {
     private static final String CSV_FILENAME = "library_data.csv";
 
     public static void main(String[] args) {
-        loadLibraryFromCSV(); // Load library data from CSV file
+        try {
+            loadLibraryFromCSV(); // Load library data from CSV file
 
-        boolean exit = false;
-        while (!exit) {
-            System.out.println("\n==== Library Management System ====");
-            System.out.println("1. Add a Book");
-            System.out.println("2. Remove a Book");
-            System.out.println("3. View Full Library");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            boolean exit = false;
+            while (!exit) {
+                System.out.println("\n==== Library Management System ====");
+                System.out.println("1. Add a Book");
+                System.out.println("2. Remove a Book");
+                System.out.println("3. View Full Library");
+                System.out.println("4. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = readIntegerInput();
 
-            switch (choice) {
-                case 1:
-                    addBook();
-                    break;
-                case 2:
-                    removeBook();
-                    break;
-                case 3:
-                    viewLibrary();
-                    break;
-                case 4:
-                    saveLibraryToCSV(); // Save library before exiting
-                    exit = true;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                switch (choice) {
+                    case 1:
+                        addBook();
+                        break;
+                    case 2:
+                        removeBook();
+                        break;
+                    case 3:
+                        viewLibrary();
+                        break;
+                    case 4:
+                        saveLibraryToCSV(); // Save library before exiting
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }
+
+            scanner.close();
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static int readIntegerInput() {
+        while (true) {
+            try {
+                int input = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Consume invalid input
             }
         }
-
-        scanner.close();
     }
 
     private static void addBook() {
         System.out.print("Enter book title: ");
         String title = scanner.nextLine();
+
         System.out.print("Enter author name: ");
         String author = scanner.nextLine();
-        System.out.print("Enter publication year: ");
-        int publicationYear = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter genre (FICTION, NONFICTION, SCIFI, etc.): ");
-        Genre genre = Genre.valueOf(scanner.nextLine().toUpperCase());
-        System.out.print("Enter page count: ");
-        int pageCount = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        System.out.print("Enter reading status (UNREAD, READ, INPROGRESS): ");
-        ReadingStatus readingStatus = ReadingStatus.valueOf(scanner.nextLine().toUpperCase());
 
-        Book book = new Book(null, title, author, publicationYear, genre, pageCount, readingStatus);
+        int publicationYear = 0;
+        while (publicationYear <= 0) {
+            System.out.print("Enter publication year: ");
+            try {
+                publicationYear = readIntegerInput();
+                if (publicationYear <= 0) {
+                    System.out.println("Publication year must be a positive number.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Invalid input. Please enter a valid number.");
+            }
+        }
+
+        Genre genre = null;
+        while (genre == null) {
+            System.out.print("Enter genre (FICTION, NONFICTION, SCIFI, MYSTERY, THRILLER, FANTASY): ");
+            try {
+                genre = Genre.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: Invalid input. Please enter a valid genre.");
+            }
+        }
+
+        int pageCount = 0;
+        while (pageCount <= 0) {
+            System.out.print("Enter page count: ");
+            try {
+                pageCount = readIntegerInput();
+                if (pageCount <= 0) {
+                    System.out.println("Page count must be a positive number.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Invalid input. Please enter a valid number.");
+            }
+        }
+
+        ReadingStatus readingStatus = null;
+        while (readingStatus == null) {
+            System.out.print("Enter reading status (UNREAD, READ, INPROGRESS): ");
+            try {
+                readingStatus = ReadingStatus.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error: Invalid input. Please enter a valid reading status.");
+            }
+        }
+
+        Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus);
         myLibrary.addBookToLibrary(book);
         System.out.println("Book added successfully.");
     }
@@ -73,7 +126,7 @@ public class Main {
     private static void removeBook() {
         System.out.println("==== Remove Options ====");
         System.out.println("1. Remove a Single Book");
-        System.out.println("2. Remove All Books by Title and Author");
+        System.out.println("2. Remove All Books by Author");
         System.out.println("3. Cancel");
         System.out.print("Enter your choice: ");
         int removeOption = scanner.nextInt();
@@ -84,7 +137,9 @@ public class Main {
                 removeSingleBook();
                 break;
             case 2:
-                removeAllBooks();
+                System.out.print("Enter the author's name: ");
+                String author = scanner.nextLine();
+                removeAllBooksByAuthor(author);
                 break;
             case 3:
                 System.out.println("Cancelled.");
@@ -123,30 +178,45 @@ public class Main {
         }
     }
 
-    private static void removeAllBooks() {
-        System.out.print("Enter title of the books to remove: ");
-        String title = scanner.nextLine();
-        System.out.print("Enter author of the books to remove: ");
-        String author = scanner.nextLine();
-        List<Book> booksToRemove = myLibrary.findBooksByTitleAndAuthor(title, author);
-        if (booksToRemove.isEmpty()) {
-            System.out.println("Books not found.");
-        } else {
-            for (Book book : booksToRemove) {
-                myLibrary.removeBookFromLibrary(book);
+    private static void removeAllBooksByAuthor(String author) {
+        List<Book> booksToRemove = new ArrayList<>();
+
+        // Find books by the specified author
+        for (Book book : myLibrary.getPersonalLibrary()) {
+            if (book.getAuthor().equalsIgnoreCase(author)) {
+                booksToRemove.add(book);
             }
-            System.out.println("All books with title \"" + title + "\" and author \"" + author + "\" removed successfully.");
+        }
+
+        // Remove the found books
+        for (Book book : booksToRemove) {
+            myLibrary.removeBookFromLibrary(book);
+        }
+
+        // Print the result
+        if (booksToRemove.isEmpty()) {
+            System.out.println("No books found by author: " + author);
+        } else {
+            System.out.println("All books by author " + author + " removed successfully.");
         }
     }
 
     private static void viewLibrary() {
-        System.out.println("\n	Full Library:");
-        System.out.println("	-------------");
+        System.out.println("\nFull Library:");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-4s | %-30s | %-30s | %-6s | %-12s | %-6s | %-12s%n", 
+                          "No.", "Title", "Author", "Year", "Genre", "Pages", "Status");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
         List<Book> library = myLibrary.getPersonalLibrary();
-        for (Book book : library) {
-            System.out.println("	* "+book.getTitle() + " by " + book.getAuthor());
+        for (int i = 0; i < library.size(); i++) {
+            Book book = library.get(i);
+            System.out.printf("%-4d | %-30s | %-30s | %-6d | %-12s | %-6d | %-12s%n", 
+                              i + 1, book.getTitle(), book.getAuthor(), book.getPublicationYear(), 
+                              book.getGenre(), book.getPageCount(), book.getReadingStatus());
         }
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
+
 
     private static void saveLibraryToCSV() {
         myLibrary.saveLibraryToCSV(CSV_FILENAME);
