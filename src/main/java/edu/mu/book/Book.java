@@ -4,7 +4,6 @@ package edu.mu.book;
 
 public class Book {
 	
-	protected String ISBN;
 	protected String title;
 	protected String author;
 	protected int publicationYear;
@@ -13,9 +12,8 @@ public class Book {
 	protected ReadingStatus ReadingStatus;
 	
 	
-	public Book(String ISBN, String title, String author, int publicationYear, Genre genre, int pageCount, ReadingStatus ReadingStatus) {
+	public Book(String title, String author, int publicationYear, Genre genre, int pageCount, ReadingStatus ReadingStatus) {
 		super();
-		this.ISBN = ISBN;
 		this.title = title;
 		this.author = author;
 		this.publicationYear = publicationYear;
@@ -26,7 +24,6 @@ public class Book {
 	
 	public Book(Book copy) {
 		super();
-		this.ISBN = copy.ISBN;
 		this.title = copy.title;
 		this.author = copy.author;
 		this.publicationYear = copy.publicationYear;
@@ -35,13 +32,6 @@ public class Book {
 		this.ReadingStatus = copy.ReadingStatus;
 	}
 
-	public String getISBN() {
-		return ISBN;
-	}
-
-	public void setISBN(String iSBN) {
-		ISBN = iSBN;
-	}
 
 	public String getTitle() {
 		return title;
@@ -94,14 +84,13 @@ public class Book {
 
 	@Override
 	public String toString() {
-		return "book [ISBN=" + ISBN + ", title=" + title + ", author=" + author + ", publicationYear=" + publicationYear
-				+ ", genre=" + genre + ", pageCount=" + pageCount + ", ReadingStatus=" + ReadingStatus + "]";
+	    return String.format("Title: %-20s Author: %-20s Publication Year: %-6d Genre: %-10s Page Count: %-4d Reading Status: %s", 
+	                         title, author, publicationYear, genre, pageCount, ReadingStatus);
 	}
 	
 	
 	public String toCsvString() {
 	    return String.join(",", 
-	            ISBN,
 	            title,
 	            author,
 	            Integer.toString(publicationYear),
