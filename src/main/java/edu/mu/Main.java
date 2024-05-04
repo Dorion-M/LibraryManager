@@ -22,7 +22,9 @@ public class Main {
                 System.out.println("1. Add a Book");
                 System.out.println("2. Remove a Book");
                 System.out.println("3. View Full Library");
-                System.out.println("4. Exit");
+                System.out.println("4. View Favorited Library");
+                System.out.println("5. View Sorted Authors");
+                System.out.println("6. Exit");
                 System.out.print("Enter your choice: ");
                 int choice = readIntegerInput();
 
@@ -37,6 +39,12 @@ public class Main {
                         viewLibrary();
                         break;
                     case 4:
+                        printFavoritedBooks();
+                        break;
+                    case 5:
+                    	printByAuthor();
+                        break;
+                    case 6:
                         saveLibraryToCSV(); // Save library before exiting
                         exit = true;
                         break;
@@ -229,5 +237,37 @@ public class Main {
     private static void loadLibraryFromCSV() {
         myLibrary.addBooksToLibrary(LibraryManagment.loadLibrary(CSV_FILENAME));
         System.out.println("Library data loaded from CSV file: " + CSV_FILENAME);
+    }
+    
+    private static void printFavoritedBooks() {
+    	//List<Book> favoritedBooks = myLibrary.showFavoritedBooks();
+    	System.out.println("\nFavorited Library:");
+    	List<Book> favoritedBooks = myLibrary.showFavoritedBooks();
+    	myLibrary.printBooks(favoritedBooks);
+    	
+    	/*
+    	System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-4s | %-30s | %-30s | %-6s | %-12s | %-6s | %-12s | %-1s%n", 
+                          "No.", "Title", "Author", "Year", "Genre", "Pages", "Status", "Favorited");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+        List<Book> favoritedBooks = myLibrary.showFavoritedBooks();
+        for (int i = 0; i < favoritedBooks.size(); i++) {
+            Book book = favoritedBooks.get(i);
+            System.out.printf("%-4d | %-30s | %-30s | %-6d | %-12s | %-6d | %-12s | %-1s%n", 
+                              i + 1, book.getTitle(), book.getAuthor(), book.getPublicationYear(), 
+                              book.getGenre(), book.getPageCount(), book.getReadingStatus(), book.getFavoritedStatus());
+        }
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+    */
+    	
+    
+    }
+    
+    private static void printByAuthor() {
+    	System.out.println("\nBooks Sorted By Author:");
+    	List<Book> authorSorted = myLibrary.sortBooksByAuthor();
+    	myLibrary.printBooks(authorSorted);
+    	
     }
 }

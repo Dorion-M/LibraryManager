@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,6 +109,40 @@ public class LibraryManagment {
         }
         return favorites;
     }
+    
+    public void printBooks(List<Book> list)
+    {
+    	
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-4s | %-30s | %-30s | %-6s | %-12s | %-6s | %-12s | %-1s%n", 
+                          "No.", "Title", "Author", "Year", "Genre", "Pages", "Status", "Favorited");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+        List<Book> booklist = list;
+        for (int i = 0; i < booklist.size(); i++) {
+            Book book = booklist.get(i);
+            System.out.printf("%-4d | %-30s | %-30s | %-6d | %-12s | %-6d | %-12s | %-1s%n", 
+                              i + 1, book.getTitle(), book.getAuthor(), book.getPublicationYear(), 
+                              book.getGenre(), book.getPageCount(), book.getReadingStatus(), book.getFavoritedStatus());
+        }
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+    
+ 
+    public List<Book> sortBooksByAuthor() {
+    	
+    	 List<Book> sortedBooks = new ArrayList<>(); 
+    	 sortedBooks = personalLibrary;
+    	
+        Collections.sort(sortedBooks, new Comparator<Book>() {
+           
+            public int compare(Book b1, Book b2) {
+                return b1.getAuthor().compareTo(b2.getAuthor());
+            }
+        });
+        return sortedBooks; 
+    }
+    	
+    
     
     
     
