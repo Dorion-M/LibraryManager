@@ -109,6 +109,13 @@ public class LibraryManagment {
         }
         return favorites;
     }
+
+    public List<Book> searchBooks(String searchTerm) {
+    return personalLibrary.stream()
+            .filter(book -> book.getTitle().toLowerCase().contains(searchTerm.toLowerCase()) ||
+                           book.getAuthor().toLowerCase().contains(searchTerm.toLowerCase()))
+            .collect(Collectors.toList());
+}
     
     public void printBooks(List<Book> list)
     {
@@ -170,8 +177,38 @@ public class LibraryManagment {
        	return sortedByYear;
        
     }
+    public List<Book> sortBooksByFavorites() {
+    List<Book> sortedBooks = new ArrayList<>(personalLibrary);
+    Collections.sort(sortedBooks, new Comparator<Book>() {
+        @Override
+        public int compare(Book b1, Book b2) {
+            return Character.compare(b2.getFavoritedStatus(), b1.getFavoritedStatus());
+        }
+    });
+    return sortedBooks;
+}
     
-    
+   public List<Book> sortBooksByMostPages() {
+    List<Book> sortedBooks = new ArrayList<>(personalLibrary);
+    Collections.sort(sortedBooks, new Comparator<Book>() {
+        @Override
+        public int compare(Book b1, Book b2) {
+            return Integer.compare(b2.getPageCount(), b1.getPageCount());
+        }
+    });
+    return sortedBooks;
+}
+
+public List<Book> sortBooksByLeastPages() {
+    List<Book> sortedBooks = new ArrayList<>(personalLibrary);
+    Collections.sort(sortedBooks, new Comparator<Book>() {
+        @Override
+        public int compare(Book b1, Book b2) {
+            return Integer.compare(b1.getPageCount(), b2.getPageCount());
+        }
+    });
+    return sortedBooks;
+} 
     
     
     
