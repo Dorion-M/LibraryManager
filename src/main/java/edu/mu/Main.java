@@ -21,12 +21,8 @@ public class Main {
                 System.out.println("\n==== Library Management System ====");
                 System.out.println("1. Add a Book");
                 System.out.println("2. Remove a Book");
-                System.out.println("3. View Full Library");
-                System.out.println("4. View Favorited Library");
-                System.out.println("5. View Sorted Authors");
-                System.out.println("6. View Sorted Genre");
-                System.out.println("7. View Sorted Year");
-                System.out.println("8. Exit");
+                System.out.println("3. View Personal Library");
+                System.out.println("4. Exit");
                 System.out.print("Enter your choice: ");
                 int choice = readIntegerInput();
 
@@ -38,21 +34,9 @@ public class Main {
                         removeBook();
                         break;
                     case 3:
-                        viewLibrary();
+                        viewLibraryOptions();
                         break;
                     case 4:
-                        printFavoritedBooks();
-                        break;
-                    case 5:
-                    	printByAuthor();
-                        break;
-                    case 6:
-                    	printByGenre();
-                        break;
-                    case 7:
-                    	printByYear();
-                        break;
-                    case 8:
                         saveLibraryToCSV(); // Save library before exiting
                         exit = true;
                         break;
@@ -134,8 +118,21 @@ public class Main {
             }
         }
         
-        System.out.print("Enter favroited status ('Y' or 'N'): ");
-        char favoritedStatus = scanner.next().charAt(0);
+        boolean favoritedStatus = false;
+        while (true) {
+            System.out.print("Add to Favorites? (yes/no): ");
+            String input = scanner.nextLine().toLowerCase();
+            if (input.equals("yes")) {
+                favoritedStatus = true;
+                break;
+            } else if (input.equals("no")) {
+                favoritedStatus = false;
+                break;
+            } else {
+                System.out.println("Error: Invalid input. Please enter 'yes' or 'no'.");
+            }
+        }
+
 
         Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus, favoritedStatus);
         myLibrary.addBookToLibrary(book);
@@ -220,22 +217,79 @@ public class Main {
         }
     }
 
-    private static void viewLibrary() {
-        System.out.println("\nFull Library:");
-        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-4s | %-30s | %-30s | %-6s | %-12s | %-6s | %-12s%n", 
-                          "No.", "Title", "Author", "Year", "Genre", "Pages", "Status");
-        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
-        List<Book> library = myLibrary.getPersonalLibrary();
-        for (int i = 0; i < library.size(); i++) {
-            Book book = library.get(i);
-            System.out.printf("%-4d | %-30s | %-30s | %-6d | %-12s | %-6d | %-12s%n", 
-                              i + 1, book.getTitle(), book.getAuthor(), book.getPublicationYear(), 
-                              book.getGenre(), book.getPageCount(), book.getReadingStatus());
+    private static void viewLibraryOptions() {
+        System.out.println("\n==== View Library Options ====");
+        System.out.println("1. View Full Library");
+        System.out.println("2. View Favorites");
+        System.out.println("3. Sort by Author");
+        System.out.println("4. Sort by Genre");
+        System.out.println("5. Sort by Page Count Ascending");
+        System.out.println("6. Sort by Page Count Descending");
+        System.out.println("7. Sort by Publication Date");
+        System.out.print("Enter your choice: ");
+        int choice = readIntegerInput();
+
+        switch (choice) {
+            case 1:
+                viewFullLibrary();
+                break;
+            case 2:
+                printFavoritedBooks();
+                break;
+            case 3:
+                printByAuthor();
+                break;
+            case 4:
+                printByGenre();
+                break;
+            case 5:
+                printByPageCountAscending();
+                break;
+            case 6:
+                printByPageCountDescending();
+                break;
+            case 7:
+                printByPublicationDate();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
         }
-        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
+    private static void viewFullLibrary() {
+        System.out.println("\nFull Library:");
+        myLibrary.printBooks(myLibrary.getPersonalLibrary());
+    }
+
+    private static void printFavoritedBooks() {
+        System.out.println("\nFavorited Library:");
+        myLibrary.printBooks(myLibrary.showFavoritedBooks());
+    }
+
+    private static void printByAuthor() {
+        System.out.println("\nBooks Sorted By Author:");
+        myLibrary.printBooks(myLibrary.sortBooksByAuthor());
+    }
+
+    private static void printByGenre() {
+        System.out.println("\nBooks Sorted by Genre:");
+        myLibrary.printBooks(myLibrary.sortByGenre());
+    }
+
+    private static void printByPageCountAscending() {
+        System.out.println("\nBooks Sorted by Page Count (Ascending):");
+        myLibrary.printBooks(myLibrary.sortBooksByLeastPages());
+    }
+
+    private static void printByPageCountDescending() {
+        System.out.println("\nBooks Sorted by Page Count (Descending):");
+        myLibrary.printBooks(myLibrary.sortBooksByMostPages());
+    }
+
+    private static void printByPublicationDate() {
+        System.out.println("\nBooks Sorted By Publication Date:");
+        myLibrary.printBooks(myLibrary.sortBooksByYear());
+    }
 
     private static void saveLibraryToCSV() {
         myLibrary.saveLibraryToCSV(CSV_FILENAME);
@@ -245,33 +299,5 @@ public class Main {
     private static void loadLibraryFromCSV() {
         myLibrary.addBooksToLibrary(LibraryManagment.loadLibrary(CSV_FILENAME));
         System.out.println("Library data loaded from CSV file: " + CSV_FILENAME);
-    }
-    
-    private static void printFavoritedBooks() {
-    	//List<Book> favoritedBooks = myLibrary.showFavoritedBooks();
-    	System.out.println("\nFavorited Library:");
-    	List<Book> favoritedBooks = myLibrary.showFavoritedBooks();
-    	myLibrary.printBooks(favoritedBooks);
-    
-    }
-    
-    private static void printByAuthor() {
-    	System.out.println("\nBooks Sorted By Author:");
-    	List<Book> authorSorted = myLibrary.sortBooksByAuthor();
-    	myLibrary.printBooks(authorSorted);
-    	
-    }
-    
-    private static void printByGenre() {
-    	System.out.println("\nBooks Sorted by Genre:");
-    	List<Book> genreSorted = myLibrary.sortByGenre();
-    	myLibrary.printBooks(genreSorted);
-    }
-    
-    private static void printByYear() {
-    	System.out.println("\nBooks Sorted By Publication Year:");
-    	List<Book> yearSorted = myLibrary.sortBooksByYear();
-    	myLibrary.printBooks(yearSorted);
-    	
     }
 }

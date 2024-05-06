@@ -10,10 +10,10 @@ public class Book {
 	protected Genre genre;
 	protected int pageCount;
 	protected ReadingStatus ReadingStatus;
-	protected char favoritedStatus;
+	protected boolean favoritedStatus;
 	
 	
-	public Book(String title, String author, int publicationYear, Genre genre, int pageCount, ReadingStatus ReadingStatus, char favoritedStatus) {
+	public Book(String title, String author, int publicationYear, Genre genre, int pageCount, ReadingStatus ReadingStatus, boolean favoritedStatus) {
 		super();
 		this.title = title;
 		this.author = author;
@@ -85,11 +85,11 @@ public class Book {
 		ReadingStatus = readingStatus;
 	}
 	
-	public char getFavoritedStatus(){
+	public boolean getFavoritedStatus(){
 		return favoritedStatus;
 	}
 	
-	public void setfavoritedStatus(char favoritedStatus) {
+	public void setfavoritedStatus(Boolean favoritedStatus) {
 		this.favoritedStatus = favoritedStatus;
 	}
 	
@@ -109,7 +109,7 @@ public class Book {
 	            genre.toString(), 
 	            Integer.toString(pageCount),
 	            ReadingStatus.toString(),
-	            Character.toString(favoritedStatus)
+	            Boolean.toString(favoritedStatus)
 	            
 	    );
 	}

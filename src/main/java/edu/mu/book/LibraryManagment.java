@@ -85,7 +85,7 @@ public class LibraryManagment {
                     Genre genre = Genre.valueOf(parts[3].trim());
                     int pageCount = Integer.parseInt(parts[4].trim());
                     ReadingStatus readingStatus = ReadingStatus.valueOf(parts[5].trim());
-                    char favoritedStatus = parts[6].trim().charAt(0);
+                    Boolean favoritedStatus = Boolean.parseBoolean(parts[6].trim());
                     Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus, favoritedStatus);
                     library.add(book);
                 }
@@ -96,19 +96,16 @@ public class LibraryManagment {
         return library;
     }
     
-    public List<Book> showFavoritedBooks()
-    {
-    	List<Book> favorites = new ArrayList<>();
-    	char test;
-    	for (Book book : personalLibrary) 
-    	{
-            test = book.getFavoritedStatus();
-    		if (test == 'y' || test == 'Y') {
+    public List<Book> showFavoritedBooks() {
+        List<Book> favorites = new ArrayList<>();
+        for (Book book : personalLibrary) {
+            if (book.getFavoritedStatus()) {
                 favorites.add(book);
             }
         }
         return favorites;
     }
+
 
     public List<Book> searchBooks(String searchTerm) {
     return personalLibrary.stream()
@@ -182,7 +179,7 @@ public class LibraryManagment {
     Collections.sort(sortedBooks, new Comparator<Book>() {
         @Override
         public int compare(Book b1, Book b2) {
-            return Character.compare(b2.getFavoritedStatus(), b1.getFavoritedStatus());
+        	return Boolean.compare(b2.getFavoritedStatus(), b1.getFavoritedStatus());
         }
     });
     return sortedBooks;
