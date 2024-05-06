@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +65,98 @@ class LibraryManagementTest {
          assertEquals("Book2", favorites.get(1).getTitle());
      }
      
+    
+     
+     
+     @Test 
+     public void testSortByYear()
+     {
+    	//This method tests the sort by year functionality of the program and includes test years to make 
+    	//sure that the program sorts the years correctly in use.
+    	 LibraryManagment myLibraryManagement = new LibraryManagment();
+    	    myLibraryManagement.addBookToLibrary(new Book("Book1", "Author1", 2019, Genre.FICTION, 300, ReadingStatus.READ, false));
+    	    myLibraryManagement.addBookToLibrary(new Book("Book2", "Author2", 2021, Genre.MYSTERY, 200, ReadingStatus.UNREAD, true));
+    	    myLibraryManagement.addBookToLibrary(new Book("Book3", "Author3", 2018, Genre.SCIFI, 250, ReadingStatus.INPROGRESS, false));
+
+    	    List<Book> sortedBooks = myLibraryManagement.sortBooksByYear();
+    	    assertNotNull(sortedBooks);
+    	    assertTrue(sortedBooks.get(0).getPublicationYear() < sortedBooks.get(1).getPublicationYear());
+    	    assertTrue(sortedBooks.get(1).getPublicationYear() < sortedBooks.get(2).getPublicationYear());
+     }
+     
+    @Test 
+    public void testSortByGenre()
+     {
+    	//This method tests the sort by genre functionality of the program and includes test genres to make 
+    	//sure that the program sorts the genres alphabetically correctly in use. 
+    	LibraryManagment library = new LibraryManagment();
+    	    library.addBookToLibrary(new Book("Book1", "Author1", 2019, Genre.THRILLER, 300, ReadingStatus.READ, false));
+    	    library.addBookToLibrary(new Book("Book2", "Author2", 2021, Genre.FICTION, 200, ReadingStatus.UNREAD, true));
+    	    library.addBookToLibrary(new Book("Book3", "Author3", 2018, Genre.MYSTERY, 250, ReadingStatus.INPROGRESS, false));
+
+    	    List<Book> sortedBooks = library.sortByGenre();
+    	    assertNotNull(sortedBooks);
+    	    assertTrue(sortedBooks.get(0).getGenre().compareTo(sortedBooks.get(1).getGenre()) <= 0);
+    	    assertTrue(sortedBooks.get(1).getGenre().compareTo(sortedBooks.get(2).getGenre()) <= 0);
+     }
+  
+
+    @Test 
+    public void testSortBooksByAuthor() 
+    {
+    	//This method tests the sort by authors functionality of the program and includes test authors to make 
+    	//sure that the program sorts the authors correctly in use.
+    	LibraryManagment library = new LibraryManagment();
+        library.addBookToLibrary(new Book("Book1", "Paul", 2019, Genre.FICTION, 300, ReadingStatus.READ, false));
+        library.addBookToLibrary(new Book("Book2", "Dorion", 2021, Genre.MYSTERY, 200, ReadingStatus.UNREAD, true));
+        library.addBookToLibrary(new Book("Book3", "Tosin", 2018, Genre.SCIFI, 250, ReadingStatus.INPROGRESS, false));
+
+        List<Book> sortedBooks = library.sortBooksByAuthor();
+        assertNotNull(sortedBooks);
+        assertTrue(sortedBooks.get(0).getAuthor().compareTo(sortedBooks.get(1).getAuthor()) <= 0);
+        assertTrue(sortedBooks.get(1).getAuthor().compareTo(sortedBooks.get(2).getAuthor()) <= 0);
+    }
+    
+    @Test 
+    public void testPrintBooks() 
+    {
+        //This programs tests the printing function of the program to check if the methods correctly prints the test
+    	// case that is given.
+    	LibraryManagment library = new LibraryManagment();
+        library.addBookToLibrary(new Book("Book1", "Author1", 2020, Genre.FICTION, 300, ReadingStatus.READ, true));
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        library.printBooks(library.getPersonalLibrary());
+
+    }
+    
+    @Test 
+    public void testSortByFavorites()
+    {
+    	//This method tests that the function for sort by favorites only returns books that are favorited.
+    	LibraryManagment library = new LibraryManagment();
+        library.addBookToLibrary(new Book("Book1", "Author1", 2020, Genre.FICTION, 200, ReadingStatus.READ, true));
+        library.addBookToLibrary(new Book("Book2", "Author2", 2021, Genre.NONFICTION, 150, ReadingStatus.INPROGRESS, false));
+        library.addBookToLibrary(new Book("Book3", "Author3", 2022, Genre.SCIFI, 300, ReadingStatus.UNREAD, true));
+        library.addBookToLibrary(new Book("Book4", "Author4", 2023, Genre.THRILLER, 400, ReadingStatus.UNREAD, false));
+        
+        List<Book> sortedBooks = library.sortBooksByFavorites();
+        boolean allFavorited = sortedBooks.stream().allMatch(Book::getFavoritedStatus);
+        assertTrue(allFavorited);
+    }
+    
+
+}
+
+     
+
+
   
      
      
      
-     
- }
+    
+
 
 
