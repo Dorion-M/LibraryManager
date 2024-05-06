@@ -44,10 +44,8 @@ public class LibraryManagment {
                 boolean alreadyExists = existingBooks.stream().anyMatch(existingBook -> existingBook.equals(book));
                 if (!alreadyExists) {
                     writer.println(book.toCsvString());
-                    System.out.println("Book added to library: " + book.getTitle());
                 }
             }
-            System.out.println("Library data saved successfully.");
         } catch (IOException e) {
             System.err.println("Error saving library data: " + e.getMessage());
         } finally {
@@ -105,6 +103,8 @@ public class LibraryManagment {
         }
         return favorites;
     }
+    
+    
 
 
     public List<Book> searchBooks(String searchTerm) {
@@ -206,7 +206,6 @@ public List<Book> sortBooksByLeastPages() {
     });
     return sortedBooks;
 } 
-    
     
     
     

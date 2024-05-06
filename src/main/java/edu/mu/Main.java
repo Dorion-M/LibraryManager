@@ -143,7 +143,8 @@ public class Main {
         System.out.println("==== Remove Options ====");
         System.out.println("1. Remove a Single Book");
         System.out.println("2. Remove All Books by Author");
-        System.out.println("3. Cancel");
+        System.out.println("3. Remove from Favorites");
+        System.out.println("4. Cancel");
         System.out.print("Enter your choice: ");
         int removeOption = scanner.nextInt();
         scanner.nextLine(); // Consume newline
@@ -158,12 +159,54 @@ public class Main {
                 removeAllBooksByAuthor(author);
                 break;
             case 3:
+                removeFromFavorites();
+                break;
+            case 4:
                 System.out.println("Cancelled.");
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
         }
     }
+    
+    private static void removeFromFavorites() {
+        List<Book> favorites = myLibrary.showFavoritedBooks();
+        if (favorites.isEmpty()) {
+            System.out.println("No books found in favorites.");
+            return;
+        }
+
+        System.out.println("==== Remove from Favorites ====");
+        System.out.println("Select a book to remove from favorites:");
+
+        // Print the list of favorite books
+        for (int i = 0; i < favorites.size(); i++) {
+            Book book = favorites.get(i);
+            System.out.println((i + 1) + ". " + book.getTitle() + " by " + book.getAuthor());
+        }
+
+        // Prompt the user to select a book to remove
+        int index;
+        while (true) {
+            System.out.print("Enter the number corresponding to the book to remove from favorites: ");
+            try {
+                index = readIntegerInput();
+                if (index < 1 || index > favorites.size()) {
+                    System.out.println("Invalid input. Please enter a number between 1 and " + favorites.size() + ".");
+                } else {
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Invalid input. Please enter a valid number.");
+            }
+        }
+
+        // Remove the selected book from favorites
+        Book bookToRemove = favorites.get(index - 1);
+        System.out.println("Book removed from favorites: " + bookToRemove.getTitle());
+    }
+    
+
     
     private static void removeSingleBook() {
         System.out.print("Enter title of the book to remove: ");
