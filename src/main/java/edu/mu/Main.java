@@ -88,7 +88,7 @@ public class Main {
         }
     }
 
-    private static void addNewBook() {
+    public static void addNewBook() {
         String title = "";
         while (title.isEmpty()) {
             System.out.print("Enter The Title of The Book: ");
@@ -159,7 +159,7 @@ public class Main {
         System.out.println("Book added successfully.");
     }
 
-    private static void addBookToFavorites() {
+    public static void addBookToFavorites() {
         List<Book> library = myLibrary.getPersonalLibrary();
         if (library.isEmpty()) {
             System.out.println("No books found in the library.");
@@ -271,7 +271,7 @@ public class Main {
     }
 
         
-    private static void removeSingleBook() {
+    public static void removeSingleBook() {
         System.out.print("Enter title of the book to remove: ");
         String title = scanner.nextLine();
         System.out.print("Enter author of the book to remove: ");
