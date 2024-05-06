@@ -113,6 +113,11 @@ public class Book {
 	            
 	    );
 	}
+
+	public boolean isFavorited() {
+		// TODO Auto-generated method stub
+		return getFavoritedStatus();
+	}
 	
 
 }

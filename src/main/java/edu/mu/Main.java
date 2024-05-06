@@ -66,11 +66,46 @@ public class Main {
     }
 
     private static void addBook() {
-        System.out.print("Enter book title: ");
-        String title = scanner.nextLine();
+        System.out.println("\n==== Add Book Options ====");
+        System.out.println("1. Add a New Book");
+        System.out.println("2. Add a Book to Favorites");
+        System.out.println("3. Cancel");
+        System.out.print("Enter your choice: ");
+        int addOption = readIntegerInput();
 
-        System.out.print("Enter author name: ");
-        String author = scanner.nextLine();
+        switch (addOption) {
+            case 1:
+                addNewBook();
+                break;
+            case 2:
+                addBookToFavorites();
+                break;
+            case 3:
+                System.out.println("Cancelled.");
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+
+    private static void addNewBook() {
+        String title = "";
+        while (title.isEmpty()) {
+            System.out.print("Enter The Title of The Book: ");
+            title = scanner.nextLine().trim();
+            if (title.isEmpty()) {
+                System.out.println("Title name cannot be empty.");
+            }
+        }
+
+        String author = "";
+        while (author.isEmpty()) {
+            System.out.print("Enter author name: ");
+            author = scanner.nextLine().trim();
+            if (author.isEmpty()) {
+                System.out.println("Author name cannot be empty.");
+            }
+        }
 
         int publicationYear = 0;
         while (publicationYear <= 0) {
@@ -82,6 +117,7 @@ public class Main {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Error: Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Consume invalid input
             }
         }
 
@@ -118,29 +154,56 @@ public class Main {
             }
         }
         
-        boolean favoritedStatus = false;
-        while (true) {
-            System.out.print("Add to Favorites? (yes/no): ");
-            String input = scanner.nextLine().toLowerCase();
-            if (input.equals("yes")) {
-                favoritedStatus = true;
-                break;
-            } else if (input.equals("no")) {
-                favoritedStatus = false;
-                break;
-            } else {
-                System.out.println("Error: Invalid input. Please enter 'yes' or 'no'.");
-            }
-        }
-
-
-        Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus, favoritedStatus);
+        Book book = new Book(title, author, publicationYear, genre, pageCount, readingStatus, false); // Set favorited status to false for new books
         myLibrary.addBookToLibrary(book);
         System.out.println("Book added successfully.");
     }
 
+    private static void addBookToFavorites() {
+        List<Book> library = myLibrary.getPersonalLibrary();
+        if (library.isEmpty()) {
+            System.out.println("No books found in the library.");
+            return;
+        }
+
+        System.out.println("\n==== Add to Favorites ====");
+        System.out.println("\nSelect a book to add to favorites:");
+
+        // Print the list of books in the library
+        for (int i = 0; i < library.size(); i++) {
+            Book book = library.get(i);
+            System.out.println((i + 1) + ". " + book.getTitle() + " by " + book.getAuthor());
+        }
+
+        // Prompt the user to select a book to add to favorites
+        int index;
+        while (true) {
+            System.out.print("\nEnter the number corresponding to the book to add to favorites: ");
+            try {
+                index = readIntegerInput();
+                if (index < 1 || index > library.size()) {
+                    System.out.println("Invalid input. Please enter a number between 1 and " + library.size() + ".");
+                } else {
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Error: Invalid input. Please enter a valid number.");
+            }
+        }
+
+        // Add the selected book to favorites
+        Book bookToAdd = library.get(index - 1);
+        if (bookToAdd.isFavorited()) {
+            System.out.println("Error: This book is already in favorites.");
+        } else {
+            bookToAdd.setfavoritedStatus(true); // Update favorited status
+            System.out.println("Book added to favorites: " + bookToAdd.getTitle());
+        }
+    }
+
+
     private static void removeBook() {
-        System.out.println("==== Remove Options ====");
+        System.out.println("\n==== Remove Options ====");
         System.out.println("1. Remove a Single Book");
         System.out.println("2. Remove All Books by Author");
         System.out.println("3. Remove from Favorites");
@@ -176,7 +239,7 @@ public class Main {
             return;
         }
 
-        System.out.println("==== Remove from Favorites ====");
+        System.out.println("\n==== Remove from Favorites ====");
         System.out.println("Select a book to remove from favorites:");
 
         // Print the list of favorite books
@@ -203,11 +266,11 @@ public class Main {
 
         // Remove the selected book from favorites
         Book bookToRemove = favorites.get(index - 1);
+        bookToRemove.setfavoritedStatus(false); // Update favorited status
         System.out.println("Book removed from favorites: " + bookToRemove.getTitle());
     }
-    
 
-    
+        
     private static void removeSingleBook() {
         System.out.print("Enter title of the book to remove: ");
         String title = scanner.nextLine();
