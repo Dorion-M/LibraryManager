@@ -341,7 +341,7 @@ public class Main {
             System.out.println("All books by author " + author + " removed successfully.");
         }
     }
-    // Lets the user decide how to organize the books in their library
+    // Lets the user decide how to organize the books in their library 
     private static void viewLibraryOptions() {
         System.out.println("\n==== View Library Options ====");
         System.out.println("1. View Full Library");
