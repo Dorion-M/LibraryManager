@@ -25,8 +25,9 @@ public class LibraryManagment {
 
     public void removeBookFromLibrary(Book book) {
         personalLibrary.remove(book);
-    }
-
+     } 
+ 
+    //selects books based on their reading status to display to the user
     public List<Book> getBooksByStatus(ReadingStatus status) {
         return personalLibrary.stream()
                 .filter(book -> book.getReadingStatus() == status)
@@ -59,7 +60,7 @@ public class LibraryManagment {
     public List<Book> getPersonalLibrary() {
         return new ArrayList<>(personalLibrary);
     }
-
+    //Allows user to select a book by entering the Title and Name of the Author
     public List<Book> findBooksByTitleAndAuthor(String title, String author) {
         return personalLibrary.stream()
                 .filter(book -> book.getTitle().equalsIgnoreCase(title) && book.getAuthor().equalsIgnoreCase(author))
@@ -69,7 +70,7 @@ public class LibraryManagment {
     public void addBooksToLibrary(List<Book> books) {
         personalLibrary.addAll(books);
     }
-
+    // Loads CSV file of the users library
     public static List<Book> loadLibrary(String filename) {
         List<Book> library = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -93,7 +94,7 @@ public class LibraryManagment {
         }
         return library;
     }
-    
+    //Displays Users Favorite books
     public List<Book> showFavoritedBooks() {
         List<Book> favorites = new ArrayList<>();
         for (Book book : personalLibrary) {
@@ -106,14 +107,14 @@ public class LibraryManagment {
     
     
 
-
+    //allows user to search for a specified book
     public List<Book> searchBooks(String searchTerm) {
     return personalLibrary.stream()
             .filter(book -> book.getTitle().toLowerCase().contains(searchTerm.toLowerCase()) ||
                            book.getAuthor().toLowerCase().contains(searchTerm.toLowerCase()))
             .collect(Collectors.toList());
 }
-    
+    // Template to Display users library
     public void printBooks(List<Book> list)
     {
     	
@@ -131,7 +132,7 @@ public class LibraryManagment {
         System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
     
- 
+    // Sorts by Author
     public List<Book> sortBooksByAuthor() {
     	
     	 List<Book> sortedBooks = new ArrayList<>(); 
@@ -145,7 +146,7 @@ public class LibraryManagment {
         });
         return sortedBooks; 
     }
-   
+   // Sorts by Genre
     public List<Book> sortByGenre(){
     	List<Book> sortedGenre = new ArrayList<>();
     	sortedGenre = personalLibrary;
@@ -158,7 +159,7 @@ public class LibraryManagment {
     	return sortedGenre;
     		
     }
-    
+    // Sorts books by Year Published
     public List<Book> sortBooksByYear() {
     	
    	 List<Book> sortedByYear = new ArrayList<>(); 
@@ -173,7 +174,10 @@ public class LibraryManagment {
        });
        	return sortedByYear;
        
+       	
     }
+    
+    //Sorts all favorited books into a seperate view
     public List<Book> sortBooksByFavorites() {
     List<Book> sortedBooks = new ArrayList<>(personalLibrary);
     Collections.sort(sortedBooks, new Comparator<Book>() {
@@ -184,7 +188,7 @@ public class LibraryManagment {
     });
     return sortedBooks;
 }
-    
+    //Sorts books based on page count Descending
    public List<Book> sortBooksByMostPages() {
     List<Book> sortedBooks = new ArrayList<>(personalLibrary);
     Collections.sort(sortedBooks, new Comparator<Book>() {
@@ -195,7 +199,7 @@ public class LibraryManagment {
     });
     return sortedBooks;
 }
-
+   //Sorts books based on page count Ascending
 public List<Book> sortBooksByLeastPages() {
     List<Book> sortedBooks = new ArrayList<>(personalLibrary);
     Collections.sort(sortedBooks, new Comparator<Book>() {

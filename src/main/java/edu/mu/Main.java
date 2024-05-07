@@ -51,6 +51,11 @@ public class Main {
             e.printStackTrace();
         }
     }
+    
+    /**
+     * Reads an integer input from the user.
+     * @return The integer input provided by the user for selecting menu option.
+     */
 
     private static int readIntegerInput() {
         while (true) {
@@ -64,27 +69,41 @@ public class Main {
             }
         }
     }
-
-    private static void addBook() {
+    
+    
+    /**
+     * Provides options for adding a new book or adding a book to favorites.
+     */
+    
+    
+    public static void addBook() {
         System.out.println("\n==== Add Book Options ====");
         System.out.println("1. Add a New Book");
         System.out.println("2. Add a Book to Favorites");
         System.out.println("3. Cancel");
         System.out.print("Enter your choice: ");
-        int addOption = readIntegerInput();
-
-        switch (addOption) {
-            case 1:
-                addNewBook();
-                break;
-            case 2:
-                addBookToFavorites();
-                break;
-            case 3:
-                System.out.println("Cancelled.");
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
+        
+        try {
+            int addOption = readIntegerInput();
+            
+            switch (addOption) {
+                case 1:
+                    addNewBook();
+                    break;
+                case 2:
+                    addBookToFavorites();
+                    break;
+                case 3:
+                    System.out.println("Cancelled.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    addBook(); // Call the method recursively to prompt the user again
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Invalid input. Please enter a valid number.");
+            scanner.nextLine(); // Consume invalid input
+            addBook(); // Call the method recursively to prompt the user again
         }
     }
 
@@ -201,7 +220,7 @@ public class Main {
         }
     }
 
-
+    // Removes a book from the library or from the favorites list
     private static void removeBook() {
         System.out.println("\n==== Remove Options ====");
         System.out.println("1. Remove a Single Book");
@@ -322,7 +341,7 @@ public class Main {
             System.out.println("All books by author " + author + " removed successfully.");
         }
     }
-
+    // Lets the user decide how to organize the books in their library
     private static void viewLibraryOptions() {
         System.out.println("\n==== View Library Options ====");
         System.out.println("1. View Full Library");
