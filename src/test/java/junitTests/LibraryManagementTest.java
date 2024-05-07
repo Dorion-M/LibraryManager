@@ -145,7 +145,110 @@ class LibraryManagementTest {
         boolean allFavorited = sortedBooks.stream().allMatch(Book::getFavoritedStatus);
         assertTrue(allFavorited);
     }
+    @Test
+    public void testSaveLibraryToCSV() {
+        LibraryManagment libraryManagement = new LibraryManagment();
+        Book book1 = new Book("Book1", "Author1", 2022, Genre.FICTION, 300, ReadingStatus.READ, true);
+        Book book2 = new Book("Book2", "Author2", 2021, Genre.NONFICTION, 250, ReadingStatus.UNREAD, false);
+        libraryManagement.addBookToLibrary(book1);
+        libraryManagement.addBookToLibrary(book2);
+
+        String filename = "test_library.csv";
+        libraryManagement.saveLibraryToCSV(filename);
+
+        // Load the saved library and assert that it contains the added books
+        List<Book> savedLibrary = LibraryManagment.loadLibrary(filename);
+        assertEquals(2, savedLibrary.size());
+        assertTrue(savedLibrary.contains(book1));
+        assertTrue(savedLibrary.contains(book2));
+
+        // Clean up the test file
+        File testFile = new File(filename);
+        testFile.delete();
+    }
     
+    @Test
+    public void testGetBooksByStatus() {
+        LibraryManagment libraryManagement = new LibraryManagment();
+        Book book1 = new Book("Book1", "Author1", 2022, Genre.FICTION, 300, ReadingStatus.READ, true);
+        Book book2 = new Book("Book2", "Author2", 2021, Genre.NONFICTION, 250, ReadingStatus.UNREAD, false);
+        Book book3 = new Book("Book3", "Author3", 2020, Genre.MYSTERY, 400, ReadingStatus.INPROGRESS, true);
+        libraryManagement.addBookToLibrary(book1);
+        libraryManagement.addBookToLibrary(book2);
+        libraryManagement.addBookToLibrary(book3);
+
+        List<Book> readBooks = libraryManagement.getBooksByStatus(ReadingStatus.READ);
+        assertEquals(1, readBooks.size());
+        assertTrue(readBooks.contains(book1));
+
+        List<Book> unreadBooks = libraryManagement.getBooksByStatus(ReadingStatus.UNREAD);
+        assertEquals(1, unreadBooks.size());
+        assertTrue(unreadBooks.contains(book2));
+
+        List<Book> inProgressBooks = libraryManagement.getBooksByStatus(ReadingStatus.INPROGRESS);
+        assertEquals(1, inProgressBooks.size());
+        assertTrue(inProgressBooks.contains(book3));
+    }
+    
+@Test
+public void testAddBooksToLibrary() {
+    LibraryManagment libraryManagement = new LibraryManagment();
+    Book book1 = new Book("Book1", "Author1", 2022, Genre.FICTION, 300, ReadingStatus.READ, true);
+    Book book2 = new Book("Book2", "Author2", 2021, Genre.NONFICTION, 250, ReadingStatus.UNREAD, false);
+    List<Book> booksToAdd = new ArrayList<>();
+    booksToAdd.add(book1);
+    booksToAdd.add(book2);
+
+    libraryManagement.addBooksToLibrary(booksToAdd);
+
+    List<Book> library = libraryManagement.getPersonalLibrary();
+    assertEquals(2, library.size());
+    assertTrue(library.contains(book1));
+    assertTrue(library.contains(book2));
+}
+@Test
+public void testSearchBooks() {
+    LibraryManagment libraryManagement = new LibraryManagment();
+    Book book1 = new Book("Book1", "Author1", 2022, Genre.FICTION, 300, ReadingStatus.READ, true);
+    Book book2 = new Book("Book2", "Author2", 2021, Genre.NONFICTION, 250, ReadingStatus.UNREAD, false);
+    Book book3 = new Book("Book3", "Author3", 2020, Genre.MYSTERY, 400, ReadingStatus.INPROGRESS, true);
+    libraryManagement.addBookToLibrary(book1);
+    libraryManagement.addBookToLibrary(book2);
+    libraryManagement.addBookToLibrary(book3);
+
+    List<Book> searchResults = libraryManagement.searchBooks("Book1");
+    assertEquals(1, searchResults.size());
+    assertTrue(searchResults.contains(book1));
+
+    searchResults = libraryManagement.searchBooks("Author2");
+    assertEquals(1, searchResults.size());
+    assertTrue(searchResults.contains(book2));
+
+    searchResults = libraryManagement.searchBooks("NonExistentTerm");
+    assertTrue(searchResults.isEmpty());
+}
+@Test
+public void testSortBooksByMostPages() {
+    LibraryManagment libraryManagement = new LibraryManagment();
+    Book book1 = new Book("Book1", "Author1", 2022, Genre.FICTION, 300, ReadingStatus.READ, true);
+    Book book2 = new Book("Book2", "Author2", 2021, Genre.NONFICTION, 250, ReadingStatus.UNREAD, false);
+    Book book3 = new Book("Book3", "Author3", 2020, Genre.MYSTERY, 400, ReadingStatus.INPROGRESS, true);
+    libraryManagement.addBookToLibrary(book1);
+    libraryManagement.addBookToLibrary(book2);
+    libraryManagement.addBookToLibrary(book3);
+
+    List<Book> sortedBooks = libraryManagement.sortBooksByMostPages();
+    assertEquals(book3, sortedBooks.get(0));
+    assertEquals(book1, sortedBooks.get(1));
+    assertEquals(book2, sortedBooks.get(2));
+}
+
+@Test
+public void testSortBooksByLeastPages() {
+    LibraryManagment libraryManagement = new LibraryManagment();
+    Book book1 = new Book("Book1", "Author1", 2022, Genre.FICTION, 300, ReadingStatus.READ, true);
+    Book book2 = new;
+}
 
 }
 
